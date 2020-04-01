@@ -1,0 +1,1395 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor={black},
+    citecolor={black},
+    urlcolor={black}
+}
+
+\usepackage{endnotes}
+\let\footnote=\endnote
+
+\usepackage[font=sf]{caption}
+
+\usepackage[font={sf,md,up}]{subfig}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman lmodern
+\font_sans lmss
+\font_typewriter lmtt
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_title "Modelling motion of a Mars satellite in Python"
+\pdf_author "Ramana Carthigesan"
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2.5cm
+\topmargin 1cm
+\rightmargin 2.5cm
+\bottommargin 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+twocolumn[ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+begin{@twocolumnfalse}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Title
+\noindent
+
+\series bold
+\size larger
+Modelling Optical Systems Using a Python Ray Tracer
+\end_layout
+
+\begin_layout Author
+Ramana Carthigesan, CID 01055400
+\end_layout
+
+\begin_layout Date
+Report Submission Date: 12 December 2016
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\Vert$
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+ words
+\end_layout
+
+\begin_layout Abstract
+An optical ray tracer was used to investigate the behaviour of simple optical
+ systems.
+ By comparing the RMS spot radius of a bundle of rays at the paraxial focal
+ plane to the diffraction limit, it was investigated whether a single spherical
+ refracting surface, a planoconvex lens in two orientations, with planar
+ side and then curved side facing the input, and a concave spherical mirror
+ were diffraction limited.
+ The RMS spot radii, estimates of the geometrical focus size, were 
+\begin_inset Formula $1.46\times10^{-5}$
+\end_inset
+
+ m, 
+\begin_inset Formula $3.43\times10^{-5}$
+\end_inset
+
+ m, 
+\begin_inset Formula $6.45\times10^{-6}$
+\end_inset
+
+ m and 
+\begin_inset Formula $3.48\times10^{-5}$
+\end_inset
+
+ m for each object respectively, compared to the diffraction limits of 
+\begin_inset Formula $5.75\times10^{-6}$
+\end_inset
+
+ m, 
+\begin_inset Formula $5.98\times10^{-6}$
+\end_inset
+
+ m, 
+\begin_inset Formula $8.63\times10^{-6}$
+\end_inset
+
+ m and 
+\begin_inset Formula $9.80\times10^{-7}$
+\end_inset
+
+ m respectively at a wavelength of 
+\begin_inset Formula $588$
+\end_inset
+
+ nm.
+ Hence only the planoconvex lens with curved side facing the input was diffracti
+on limited.
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{@twocolumnfalse} ]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+Modelling an optical system can be a complicated problem when considering
+ light propagating through it as a wave.
+ Accounting for the wavefronts' changing of shape and direction is difficult.
+ A solution to this is the model of light rays, which run perpendicular
+ to the wavefronts.
+ A continuous light field can then be modelled as a series of discrete rays,
+ which can be individually propagated through the system, making the modelling
+ of the system mathematically and computationally less complex.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Here, an optical ray tracer in the Python programming language is used to
+ calculate the propagation of light rays through simple optical elements,
+ in order to investigate their properties.
+ A single spherical refracting surface, planoconvex lens and concave spherical
+ mirror are modelled, in order to determine their relative performance.
+ The planoconvex lens is modelled with its planar side facing the input
+ and then the output, to find the optimal orientation.
+ The performance is measured here by the deviation of rays from the ideal
+ focus due to spherical aberration.
+ This deviation, measured as the root mean square (RMS) spot radius at the
+ ideal focus, is compared with the diffraction limit, in order to determine
+ whether the elements' performance are limited by spherical aberration or
+ by diffraction.
+\end_layout
+
+\begin_layout Section
+Theory
+\end_layout
+
+\begin_layout Standard
+Rays are idealised constructs that indicate the propagation of light and
+ point in the direction of energy flow
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Law J, Rennie R (ed.).
+ 
+\shape italic
+A Dictionary of Physics
+\shape default
+.
+ 7th 
+\end_layout
+
+\begin_layout Plain Layout
+ed.
+ Oxford: Oxford University Press; 2015.
+\begin_inset CommandInset label
+LatexCommand label
+name "fn:ed.-Oxford:-Oxford"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+ Ray tracers calculate the paths these rays take through the system, using
+ the property that rays travel in straight lines unless they encounter a
+ change in medium.
+ When a ray intersects a new medium, the tracer calculates the change in
+ the ray's direction, if any, and propagates a new ray in that direction
+ from the point of intersection.
+ However, rays cannot be used to model phenomena which involve objects smaller
+ than the light's wavelength, such as diffraction or interference, which
+ require taking into account the phases of the rays.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+On passing into a new optical medium, light will change direction if the
+ properties of the new medium are such that its speed of propagation changes.
+ This phenomenon is known as refraction.
+ The relevant parameter of optical media for refraction is the refractive
+ index, which is defined
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fn:ed.-Oxford:-Oxford"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ by
+\begin_inset Formula 
+\[
+n=\frac{c_{vacuum}}{c_{medium}},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $c_{vacuum}$
+\end_inset
+
+ and 
+\begin_inset Formula $c_{medium}$
+\end_inset
+
+ are the speeds of light in vacuum and in the medium respectively.
+ Snell's law
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Woan G.
+ 
+\shape italic
+The Cambridge Handbook of Physics
+\end_layout
+
+\begin_layout Plain Layout
+
+\shape italic
+Formulas.
+ 
+\shape default
+3rd ed.
+ Cambridge: Cambridge University 
+\end_layout
+
+\begin_layout Plain Layout
+Press; 2003.
+ p.154.
+\end_layout
+
+\end_inset
+
+ can then be used to find the change in direction of a light ray as it passes
+ from one medium into another:
+\begin_inset Formula 
+\[
+n_{i}\sin\theta_{i}=n_{t}\sin\theta_{t},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $n_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $n_{t}$
+\end_inset
+
+ are the refractive indices on the incident and transmitted sides of the
+ boundary respectively, and 
+\begin_inset Formula $\theta_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta_{t}$
+\end_inset
+
+ are the angles of the ray to the normal to the boundary on the incident
+ and transmitted sides respectively.
+ In three dimensions, the ray propagation is further constrained by the
+ fact that the incident ray, the refracted ray, and the normal at the point
+ of incidence lie in the same plane.
+ Applying this constraint leads to the vector form of Snell's Law
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Carthigesan R.
+ 
+\shape italic
+Laboratory Notebook
+\shape default
+.
+ pp.
+ 45-46.
+\end_layout
+
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+\hat{\mathbf{r}}_{t}=\frac{n_{i}}{n_{t}}\hat{\mathbf{r}}_{i}+\left(\frac{n_{i}}{n_{t}}\cos\theta_{i}-\cos\theta_{t}\right)\hat{\mathbf{n}},\label{eq:vector snell's law}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\hat{\mathbf{r}}_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\mathbf{r}}_{t}$
+\end_inset
+
+ are the unit direction vectors of the ray on the incident and transmitted
+ sides respectively and 
+\begin_inset Formula $\hat{\mathbf{n}}$
+\end_inset
+
+ is the unit direction vector of the surface normal, with the convention
+ that it points opposite to the direction of propagation of the incident
+ ray.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+At the boundary with mirrored surfaces, light rays follow the law that the
+ angles of the incident and reflected rays to the normal are equal.
+ Applying the additional constraint that the incident and reflected rays,
+ along with the normal, lie in the same plane, the vector form of the law
+ of reflection becomes
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Carthigesan R.
+ 
+\shape italic
+Laboratory Notebook
+\shape default
+.
+ p.
+ 50.
+\end_layout
+
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+\mathbf{r}_{r}=\mathbf{r}_{i}-2\left(\mathbf{r}_{i}\cdot\hat{\mathbf{n}}\right)\hat{\mathbf{n}},\label{eq:law of reflection}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\mathbf{r}_{r}$
+\end_inset
+
+ and 
+\series bold
+
+\begin_inset Formula $\mathbf{r}_{i}$
+\end_inset
+
+
+\series default
+ are the reflected and incident ray direction vectors respectively.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Lenses are optical devices which use the phenomenon of refraction to focus
+ or disperse a light beam.
+ In this investigation, we consider the performance of converging lenses
+ and concave mirrors designed to focus light beams to a point.
+ Spherical optical elements suffer from spherical aberration, a phenomenon
+ where rays passing through different points in the element are focussed
+ to slightly different distances, due to the curvature of the element.
+ The case where rays further from the optical axis through the centre of
+ the element are focussed closer to the element is known as positive spherical
+ aberration, while the opposite case is known as negative spherical aberration.
+\end_layout
+
+\begin_layout Section
+Method
+\end_layout
+
+\begin_layout Standard
+An object-oriented approach was used for the construction of the ray tracer.
+ Classes were created for rays and optical elements within a ray tracer
+ module.
+ Spherical refractor, spherical reflector and output plane classes were
+ created that inherited from the parent optical element class.
+ By creating methods in the ray class to store points and directions as
+ Cartesian 
+\begin_inset Formula $3$
+\end_inset
+
+-vectors, a ray could be represented by an object of the ray class.
+ Methods for calculating the intercepts of these rays with optical elements
+ were implemented.
+ To calculate the new directions of the rays after intercept, for the lens
+ class a refract method based on equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:vector snell's law"
+
+\end_inset
+
+ was implemented, while for the mirror class a reflect method based on equation
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:law of reflection"
+
+\end_inset
+
+ was implemented.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+To calculate the intercept of the ray with a spherical object, the following
+ expression was used
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Paterson C.
+ 
+\shape italic
+Project A: An Optical Ray Tracer
+\shape default
+.
+ Available
+\end_layout
+
+\begin_layout Plain Layout
+from: https://bb.imperial.ac.uk/bbcswebdav
+\end_layout
+
+\begin_layout Plain Layout
+/pid-957933-dt-content-rid-3193661_1/courses/
+\end_layout
+
+\begin_layout Plain Layout
+COURSE-PHY2_LAB-16_17/Y2Computing/
+\end_layout
+
+\begin_layout Plain Layout
+Y2PyCourse/Students/Projects/html/Raytrace.html
+\begin_inset CommandInset label
+LatexCommand label
+name "fn:Y2PyCourse/Students/Projects/htm"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+\mathbf{p}_{intercept}=\mathbf{p}_{initial}+l\hat{\mathbf{r}}_{i},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\mathbf{p}_{intercept}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathbf{p}_{initial}$
+\end_inset
+
+ are the position vectors of the intercept and initial position of the ray
+ respectively, and 
+\begin_inset Formula $l$
+\end_inset
+
+ is given by:
+\begin_inset Formula 
+\[
+l=-\mathbf{r}\cdot\hat{\mathbf{r}}_{i}\pm\sqrt{\left(\mathbf{r}\cdot\hat{\mathbf{r}}_{i}\right)^{2}-\left(\left|\mathbf{r}\right|^{2}-R^{2}\right)},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\mathbf{r}$
+\end_inset
+
+ is the vector from the centre of curvature of the spherical object to the
+ initial point of the ray and 
+\begin_inset Formula $R$
+\end_inset
+
+ is the radius of curvature.
+ The intercept-calculating method was configured to select the correct value
+ of 
+\begin_inset Formula $l$
+\end_inset
+
+ based on the geometry of the system involved.
+ For 
+\begin_inset Formula $R=0$
+\end_inset
+
+, the intercept was calculated
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Carthigesan R.
+ 
+\shape italic
+Laboratory Notebook
+\shape default
+.
+ p.
+ 48.
+\end_layout
+
+\end_inset
+
+ as:
+\begin_inset Formula 
+\[
+\mathbf{p}_{intercept}=\mathbf{p}_{initial}+\frac{z_{0}-\left(\mathbf{p}_{initial}\cdot\hat{\mathbf{k}}\right)}{\hat{\mathbf{r}}_{i}\cdot\hat{\mathbf{k}}}\hat{\mathbf{r}}_{i},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\hat{\mathbf{k}}$
+\end_inset
+
+ is the unit vector in the positive direction along the optical axis and
+ 
+\begin_inset Formula $z_{0}$
+\end_inset
+
+ is the intercept of the element with the optical axis.
+ This method was also used to calculate the intercept of the rays with the
+ output plane.
+ A propagate method was included for all optical elements that would take
+ a ray object as an argument, and using the intercept, refract and reflect
+ methods where appropriate, add the new position and direction vectors to
+ the ray object.
+ In this way, multiple rays could be propagated through a system of optical
+ elements to an output plane.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The paraxial focus of each element was first estimated.
+ A ray starting 
+\begin_inset Formula $0.1$
+\end_inset
+
+ mm from the optical axis and travelling parallel to it was propagated through
+ the element, and the point at which it intercepted the optical axis found;
+ this was the paraxial focus.
+ The output plane was then placed at this point, and a bundle of rays of
+ diameter 
+\begin_inset Formula $10$
+\end_inset
+
+ mm was propagated through the element.
+ At the output plane, the RMS spot radius was calculated using the formula:
+\begin_inset Formula 
+\[
+s_{rms}=\sqrt{\frac{\sum_{i}^{N}\left(x_{i}^{2}+y_{i}^{2}\right)}{N}},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $N$
+\end_inset
+
+ is the number of rays and 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+, 
+\begin_inset Formula $y_{i}$
+\end_inset
+
+ are the horizontal and vertical displacements of the rays from the optical
+ axis at the output plane.
+ The RMS spot radius is a measure of the deviation of the rays from the
+ paraxial focus, and hence also a measure of the degree of spherical aberration.
+ Due to the wave-like nature of light, there is a limit on the spatial resolutio
+n of the element, known as the diffraction limit.
+ This is given by
+\family sans
+
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+
+\family sans
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fn:Y2PyCourse/Students/Projects/htm"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\family default
+:
+\begin_inset Formula 
+\[
+d_{lim}=\frac{\lambda f}{D},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is the wavelength of the light, 
+\begin_inset Formula $f$
+\end_inset
+
+ is the focal length and 
+\begin_inset Formula $D$
+\end_inset
+
+ is the aperture diameter, in this case the diameter of the bundle of rays
+ at the input.
+\end_layout
+
+\begin_layout Section
+Results
+\end_layout
+
+\begin_layout Standard
+The first optical element investigated was a single spherical refractor
+ of refractive index 
+\begin_inset Formula $1.5168$
+\end_inset
+
+ at a light wavelength of 
+\begin_inset Formula $588$
+\end_inset
+
+ nm and curvature 
+\begin_inset Formula $0.03$
+\end_inset
+
+ mm
+\begin_inset Formula $^{-1}$
+\end_inset
+
+.
+ The lens exhibits positive spherical aberration, as can be seen in Figure
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:spherical refractor, positive aberration"
+
+\end_inset
+
+.
+ Rays closer to the centre of the lens are focussed to points further along
+ the optical axis than rays closer to the edge of the lens.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+A ray diagram of the 
+\begin_inset Formula $10$
+\end_inset
+
+ mm ray bundle's propagation through the system is shown in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Ray-diagram-for-single-spherical-refractor"
+
+\end_inset
+
+ and a spot diagram of the input and a spot diagram at the output are shown
+ in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Spot-diagrams-single-spherical-refractor"
+
+\end_inset
+
+.
+ The paraxial focus was estimated as 
+\begin_inset Formula $97.83$
+\end_inset
+
+ mm, and the RMS spot radius at the paraxial focal plane was calculated
+ as 
+\begin_inset Formula $1.46\times10^{-5}$
+\end_inset
+
+ m.
+ Using the paraxial focus as an estimate of the focal length of the lens,
+ the diffraction limit was calculated as 
+\begin_inset Formula $5.75\times10^{-6}$
+\end_inset
+
+ m.
+ Hence the deviation of rays due to spherical aberration is greater than
+ the diffraction limit, so the lens performance is not diffraction limited.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Float figure
+placement h
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename spherical_aberration_single_spherical_refract.png
+	width 8cm
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\family sans
+Positive spherical aberration of single convex spherical refractor, curvature
+ 0.03 and refractive index 1.5168.
+ The blue lines represent the rays, which propagate from left to right.
+ The vertical axis is the y-axis in the Cartesian space of the system, while
+ the horizontal axis is the optical axis of the system.
+\family default
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:spherical refractor, positive aberration"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Float figure
+placement h
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename ray_diagram_single_spherical_refract.png
+	width 8cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\family sans
+Ray diagram for the single convex spherical refractor
+\family default
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Ray-diagram-for-single-spherical-refractor"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename input_single_spherical_refract.png
+	width 3.9cm
+
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Graphics
+	filename output_single_spherical_refract.png
+	width 4.2cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\family sans
+Spot diagrams at the input and output planes for the single convex spherical
+ refractor.
+ The blue circles represent the ray positions.
+ The vertical and horizontal axes are the x- and y-axes in the Cartesian
+ space of the system.
+\family default
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Spot-diagrams-single-spherical-refractor"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The next element investigated was a planoconvex lens of the same refractive
+ index.
+ It was comprised of a spherical surface of curvature magnitude 
+\begin_inset Formula $0.02$
+\end_inset
+
+ mm
+\begin_inset Formula $^{-1}$
+\end_inset
+
+ and a planar surface, separated by 
+\begin_inset Formula $5$
+\end_inset
+
+ mm on the optical axis.
+ With the planar side facing the input, the paraxial focus was estimated
+ as 
+\begin_inset Formula $101.7$
+\end_inset
+
+ mm and the RMS spot radius was calculated as 
+\begin_inset Formula $3.43\times10^{-5}$
+\end_inset
+
+ m.
+ Compared to a diffraction limit of 
+\begin_inset Formula $5.98\times10^{-6}$
+\end_inset
+
+ m, the lens in this configuration is hence not diffraction limited.
+ With the curved side facing the input, the corresponding values were 
+\begin_inset Formula $146.7$
+\end_inset
+
+ mm, 
+\begin_inset Formula $6.45\times10^{-6}$
+\end_inset
+
+ mm and 
+\begin_inset Formula $8.63\times10^{-6}$
+\end_inset
+
+ m, indicating the lens in this orientation was diffraction limited.
+ Hence we conclude that a planoconvex lens exhibits better performance with
+ its curved side facing the input.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Spot-diagrams-planoconvex"
+
+\end_inset
+
+ shows the relevant spot diagrams at the output.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename output_planoconvex_plane_first.png
+	width 3.8cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\family sans
+Orientation with planar side facing input.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename output_planoconvex_curve_first.png
+	width 4cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\family sans
+Orientation with curved side facing input.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\family sans
+Spot diagrams at the output plane for a planoconvex lens in two orientations.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Spot-diagrams-planoconvex"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+A concave spherical mirror also suffers from positive spherical aberration,
+ as is demonstrated in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Positive-spherical-aberration-concave-mirror"
+
+\end_inset
+
+.
+ The paraxial focus for the mirror was estimated as 
+\begin_inset Formula $16.67$
+\end_inset
+
+ mm from the mirror centre.
+ The RMS spot radius was calculated as 
+\begin_inset Formula $3.48\times10^{-5}$
+\end_inset
+
+ m, compared to a diffraction limit of 
+\begin_inset Formula $9.80\times10^{-7}$
+\end_inset
+
+ m, so the concave spherical mirror was not diffraction limited.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Spot-diagram-concave-mirror"
+
+\end_inset
+
+ shows the output spot diagram for the mirror.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Float figure
+placement h
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename spherical_aberration_single_spherical_reflect_concave.png
+	width 8cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\family sans
+Positive spherical aberration of concave spherical mirror, curvature 0.03.
+\family default
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Positive-spherical-aberration-concave-mirror"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename output_single_spherical_reflect_concave.png
+	width 8cm
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\family sans
+Spot diagram at the output plane for a concave spherical mirror.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Spot-diagram-concave-mirror"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Conclusion
+\end_layout
+
+\begin_layout Standard
+A Python optical ray tracer has been shown to be viable for use in investigating
+ the behaviour of some simple optical elements.
+ The ray tracer was able to model the refraction and reflection behaviour
+ of spherical and planar refracting and spherical reflecting surfaces, including
+ spherical aberration.
+ Phenomena that require accounting for relative phase, such as diffraction
+ as interference, were not in the scope of the ray tracer.
+ The ray tracer was also able to give some recommendations for lens design
+ for optimal performance: a planoconvex lens, for example, has been shown
+ to perform best when oriented such that its curved side faces the input.
+ Further investigations could include optimising lens design by considering
+ a biconvex lens; the radii of curvature of the two sides could be adjusted
+ to minimise the RMS spot radius, in order to create a 
+\begin_inset Quotes eld
+\end_inset
+
+best-form
+\begin_inset Quotes erd
+\end_inset
+
+ lens.
+ This would enable minimisation of spherical aberration without having to
+ resort to the often more difficult production of aspheric lenses.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+def
+\backslash
+notesname{References}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+theendnotes
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
